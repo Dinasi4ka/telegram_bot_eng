@@ -5,6 +5,7 @@ from aiogram import Bot, Dispatcher
 from aiogram.enums import ParseMode
 from aiogram.client.default import DefaultBotProperties
 from aiogram.fsm.storage.memory import MemoryStorage
+from aiogram.types import Update
 
 from config import BOT_TOKEN
 from handlers import start, balance, schedule, info
@@ -29,8 +30,10 @@ async def webhook_handler(request):
     bot = request.app["bot"]
     dp = request.app["dp"]
 
-    update = await request.json()
-    await dp.process_update(bot, update)
+    data = await request.json()
+    update = Update.model_validate(data)
+
+    await dp.feed_update(bot, update)
 
     return web.Response(text="OK")
 
