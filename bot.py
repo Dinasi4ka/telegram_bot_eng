@@ -14,31 +14,43 @@ logging.basicConfig(
     format="%(asctime)s [%(levelname)s] %(name)s: %(message)s"
 )
 
+BASE_URL = "https://telegram-bot-eng-stpt.onrender.com"
+WEBHOOK_PATH = "/webhook"
+WEBHOOK_URL = BASE_URL + WEBHOOK_PATH
 
-# ── Health check сервер ──────────────────────────────────────────────────────
-# Render вимагає відкритий порт, а UptimeRobot пінгує його кожні 5 хв,
-# щоб бот не засинав на безкоштовному плані.
+
+# ── Health check ─────────────────────────────
 async def health_handler(request):
     return web.Response(text="OK — EduBot is running 🤖")
 
 
-async def run_web():
-    app = web.Application()
-    app.router.add_get("/", health_handler)
-    app.router.add_get("/health", health_handler)
+# ── Webhook handler ──────────────────────────
+async def webhook_handler(request):
+    bot = request.app["bot"]
+    dp = request.app["dp"]
+
+    update = await request.json()
+    await dp.feed_raw_update(bot, update)
+
+    return web.Response(text="OK")
+
+
+# ── Start web server ─────────────────────────
+async def run_web(app):
     runner = web.AppRunner(app)
     await runner.setup()
-    port = 8080
-    site = web.TCPSite(runner, "0.0.0.0", port)
+    site = web.TCPSite(runner, "0.0.0.0", 8080)
     await site.start()
-    logging.info(f"Health check сервер запущено на порту {port} ✅")
+    logging.info("Web server запущено на порту 8080 ✅")
 
 
+# ── MAIN ─────────────────────────────────────
 async def main():
     bot = Bot(
         token=BOT_TOKEN,
         default=DefaultBotProperties(parse_mode=ParseMode.HTML)
     )
+
     dp = Dispatcher(storage=MemoryStorage())
 
     dp.include_router(start.router)
@@ -46,11 +58,25 @@ async def main():
     dp.include_router(schedule.router)
     dp.include_router(info.router)
 
-    await run_web()
+    # ── Web app ───────────────────────────────
+    app = web.Application()
+    app["bot"] = bot
+    app["dp"] = dp
 
-    logging.info("EduBot запущено ✅")
+    app.router.add_get("/", health_handler)
+    app.router.add_get("/health", health_handler)
+    app.router.add_post(WEBHOOK_PATH, webhook_handler)
+
+    await run_web(app)
+
+    # ── webhook setup ────────────────────────
     await bot.delete_webhook(drop_pending_updates=True)
-    await dp.start_polling(bot, allowed_updates=dp.resolve_used_update_types())
+    await bot.set_webhook(WEBHOOK_URL)
+
+    logging.info(f"Webhook встановлено: {WEBHOOK_URL} ✅")
+
+    # ── keep alive ───────────────────────────
+    await asyncio.Event().wait()
 
 
 if __name__ == "__main__":
