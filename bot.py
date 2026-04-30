@@ -30,7 +30,7 @@ async def webhook_handler(request):
     dp = request.app["dp"]
 
     update = await request.json()
-    await dp.feed_raw_update(bot, update)
+    await dp.process_update(bot, update)
 
     return web.Response(text="OK")
 
