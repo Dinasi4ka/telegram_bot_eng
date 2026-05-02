@@ -36,7 +36,7 @@ TEACHER_LINK: str = f"https://t.me/{TEACHER_USERNAME.lstrip('@')}"
 
 # ───────────────────────── PAYMENTS ─────────────────────────
 # Замініть на реальні посилання Monobank
-MONOBANK_LINK_4: str = os.getenv("MONOBANK_LINK_4", "https://send.monobank.ua/YOUR_LINK_4")
-MONOBANK_LINK_8: str = os.getenv("MONOBANK_LINK_8", "https://send.monobank.ua/YOUR_LINK_8")
+MONOBANK_LINK_4: str = os.getenv("MONOBANK_LINK_4", "https://send.monobank.ua/AcMtCUsM5X?a=1240.00")
+MONOBANK_LINK_8: str = os.getenv("MONOBANK_LINK_8", "https://send.monobank.ua/AcMtCUsM5X?a=2480.00")
 PRICE_4: int = 1240
 PRICE_8: int = 2480
