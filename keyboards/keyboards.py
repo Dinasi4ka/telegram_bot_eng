@@ -7,54 +7,68 @@ from aiogram.utils.keyboard import InlineKeyboardBuilder, ReplyKeyboardBuilder
 
 def main_menu_kb() -> ReplyKeyboardMarkup:
     b = ReplyKeyboardBuilder()
-    b.row(KeyboardButton(text="💳 Мій баланс"),
-          KeyboardButton(text="📅 Вільні заняття"))
-    b.row(KeyboardButton(text="📋 Мої заняття"),
-          KeyboardButton(text="❌ Скасувати заняття"))
-    b.row(KeyboardButton(text="ℹ️ Про центр"),
-          KeyboardButton(text="📞 Контакти"))
+    b.row(
+        KeyboardButton(text="💳 Мій баланс"),
+        KeyboardButton(text="📋 Мій розклад"),
+    )
+    b.row(
+        KeyboardButton(text="❌ Скасувати заняття"),
+        KeyboardButton(text="🔄 Перенести заняття"),
+    )
+    b.row(
+        KeyboardButton(text="🛒 Придбати заняття"),
+        KeyboardButton(text="ℹ️ Інформація"),
+    )
+    b.row(
+        KeyboardButton(text="👩‍🏫 Написати викладачу"),
+    )
     return b.as_markup(resize_keyboard=True)
-
-
-def free_slots_kb(slots: list[dict]) -> InlineKeyboardMarkup:
-    b = InlineKeyboardBuilder()
-    for s in slots:
-        label = f"📆 {s['date']}  🕐 {s['time']}"
-        b.button(text=label, callback_data=f"book:{s['row']}:{s['date']}:{s['time']}")
-    b.button(text="◀️ Назад", callback_data="back")
-    b.adjust(1)
-    return b.as_markup()
-
-
-def confirm_book_kb(row: int, date: str, time: str) -> InlineKeyboardMarkup:
-    b = InlineKeyboardBuilder()
-    b.button(text="✅ Підтвердити запис", callback_data=f"confirm_book:{row}:{date}:{time}")
-    b.button(text="❌ Скасувати", callback_data="back")
-    b.adjust(1)
-    return b.as_markup()
-
-
-def my_lessons_kb(lessons: list[dict]) -> InlineKeyboardMarkup:
-    b = InlineKeyboardBuilder()
-    for l in lessons:
-        label = f"📆 {l['date']}  🕐 {l['time']}"
-        b.button(text=label, callback_data=f"cancel_select:{l['date']}:{l['time']}")
-    b.button(text="◀️ Назад", callback_data="back")
-    b.adjust(1)
-    return b.as_markup()
-
-
-def confirm_cancel_kb(date: str, time: str) -> InlineKeyboardMarkup:
-    b = InlineKeyboardBuilder()
-    b.button(text="✅ Так, скасувати", callback_data=f"confirm_cancel:{date}:{time}")
-    b.button(text="◀️ Ні, залишити", callback_data="back")
-    b.adjust(2)
-    return b.as_markup()
 
 
 def back_kb() -> InlineKeyboardMarkup:
     b = InlineKeyboardBuilder()
     b.button(text="◀️ Назад до меню", callback_data="back")
+    return b.as_markup()
+
+
+def teacher_kb(teacher_link: str) -> InlineKeyboardMarkup:
+    b = InlineKeyboardBuilder()
+    b.button(text="✍️ Написати викладачу", url=teacher_link)
+    b.button(text="◀️ Назад до меню", callback_data="back")
+    b.adjust(1)
+    return b.as_markup()
+
+
+def cancel_lesson_kb(teacher_link: str) -> InlineKeyboardMarkup:
+    b = InlineKeyboardBuilder()
+    b.button(text="✍️ Написати викладачу", url=teacher_link)
+    b.button(text="◀️ Назад до меню", callback_data="back")
+    b.adjust(1)
+    return b.as_markup()
+
+
+def reschedule_kb(teacher_link: str) -> InlineKeyboardMarkup:
+    b = InlineKeyboardBuilder()
+    b.button(text="✍️ Написати викладачу", url=teacher_link)
+    b.button(text="◀️ Назад до меню", callback_data="back")
+    b.adjust(1)
+    return b.as_markup()
+
+
+def packages_kb() -> InlineKeyboardMarkup:
+    b = InlineKeyboardBuilder()
+    b.button(text="📦 4 заняття — 1240 грн", callback_data="buy:4")
+    b.button(text="📦 8 занять — 2480 грн", callback_data="buy:8")
+    b.button(text="◀️ Назад до меню", callback_data="back")
+    b.adjust(1)
+    return b.as_markup()
+
+
+def payment_kb(link: str, package: str) -> InlineKeyboardMarkup:
+    b = InlineKeyboardBuilder()
+    b.button(text=f"💳 Оплатити {package}", url=link)
+    b.button(text="◀️ Назад", callback_data="back_to_packages")
+    b.adjust(1)
     return b.as_markup()
 
 

@@ -28,3 +28,15 @@ CENTER_NAME: str = "EduBot Навчальний Центр"
 CENTER_PHONE: str = "+380 44 123-45-67"
 CENTER_ADDRESS: str = "вул. Навчальна, 12"
 CENTER_SCHEDULE: str = "Пн–Пт: 09:00–20:00, Сб: 09:00–16:00"
+
+# ───────────────────────── TEACHER ─────────────────────────
+# Замініть на реальний username викладача
+TEACHER_USERNAME: str = os.getenv("TEACHER_USERNAME", "@dinasi4_ka")
+TEACHER_LINK: str = f"https://t.me/{TEACHER_USERNAME.lstrip('@')}"
+
+# ───────────────────────── PAYMENTS ─────────────────────────
+# Замініть на реальні посилання Monobank
+MONOBANK_LINK_4: str = os.getenv("MONOBANK_LINK_4", "https://send.monobank.ua/YOUR_LINK_4")
+MONOBANK_LINK_8: str = os.getenv("MONOBANK_LINK_8", "https://send.monobank.ua/YOUR_LINK_8")
+PRICE_4: int = 1240
+PRICE_8: int = 2480
