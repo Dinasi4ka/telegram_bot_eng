@@ -163,6 +163,17 @@ def get_booked_slots_by_phone(phone: str) -> list[dict]:
 # ───────────────────────── HELPERS ─────────────────────────
 
 def _normalize_phone(phone: str) -> str:
-    """Нормалізація телефону."""
+    """Приводить номер до формату 0XXXXXXXXX (наприклад: 0978514337)."""
     import re
-    return re.sub(r"[\s\(\)\-]", "", phone)
+
+    if not phone:
+        return ""
+
+    # прибираємо все зайве (пробіли, +, -, дужки)
+    phone = re.sub(r"[^\d]", "", phone)
+
+    # якщо формат +380XXXXXXXXX або 380XXXXXXXXX
+    if phone.startswith("380"):
+        phone = "0" + phone[3:]
+
+    return phone
