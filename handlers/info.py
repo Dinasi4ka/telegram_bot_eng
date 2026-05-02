@@ -5,7 +5,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 
 from config import CENTER_NAME, CENTER_PHONE, CENTER_ADDRESS, CENTER_SCHEDULE, ADMIN_IDS
-from keyboards.keyboards import back_kb, admin_kb
+from keyboards.keyboards import back_kb, admin_kb, packages_kb, payment_kb, teacher_kb
 from services.sheets import get_all_users
 
 router = Router()

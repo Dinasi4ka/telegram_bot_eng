@@ -31,7 +31,7 @@ CENTER_SCHEDULE: str = "Пн–Пт: 09:00–20:00, Сб: 09:00–16:00"
 
 # ───────────────────────── TEACHER ─────────────────────────
 # Замініть на реальний username викладача
-TEACHER_USERNAME: str = os.getenv("TEACHER_USERNAME", "@dinasi4_ka")
+TEACHER_USERNAME: str = os.getenv("TEACHER_USERNAME", "@SolomiyaStr")
 TEACHER_LINK: str = f"https://t.me/{TEACHER_USERNAME.lstrip('@')}"
 
 # ───────────────────────── PAYMENTS ─────────────────────────
