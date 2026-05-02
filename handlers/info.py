@@ -4,7 +4,7 @@ from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 
-from config import CENTER_NAME, CENTER_PHONE, CENTER_ADDRESS, CENTER_SCHEDULE, ADMIN_IDS
+from config import ADMIN_IDS, TEACHER_USERNAME, TEACHER_LINK, MONOBANK_LINK_4, MONOBANK_LINK_8, PRICE_4, PRICE_8
 from keyboards.keyboards import back_kb, admin_kb, packages_kb, payment_kb, teacher_kb
 from services.sheets import get_all_users
 
