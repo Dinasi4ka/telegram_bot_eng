@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from aiogram import Bot
 from services.sheets import _open_sheet
+from datetime import timezone, timedelta
 from config import SHEET_SCHEDULE, SHEET_USERS
 
 logger = logging.getLogger(__name__)
@@ -20,7 +21,8 @@ def _normalize_phone(phone: str) -> str:
 
 async def check_and_send_reminders(bot: Bot):
     try:
-        now = datetime.now()
+        UA_TZ = timezone(timedelta(hours=3))
+        now = datetime.now(UA_TZ).replace(tzinfo=None)
         target = now + timedelta(hours=1, minutes=30)
         target_date = target.strftime("%Y-%m-%d")
         target_time = target.strftime("%H:%M")
@@ -38,7 +40,9 @@ async def check_and_send_reminders(bot: Bot):
 
             if str(lesson.get("date", "")) != target_date:
                 continue
-            if str(lesson.get("time", "")) != target_time:
+
+            lesson_time = str(lesson.get("time", ""))[:5]
+            if lesson_time != target_time:
                 continue
 
             phone = str(lesson.get("booked_by_phone", ""))
