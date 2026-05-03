@@ -180,3 +180,22 @@ def _normalize_phone(phone: str) -> str:
 
     # вже 9 цифр
     return digits
+
+def save_telegram_id(phone: str, telegram_id: int) -> bool:
+    user = get_user_by_phone(phone)
+    if not user:
+        return False
+    ws = _open_sheet(SHEET_USERS)
+    ws.update_cell(user["row"], 5, telegram_id)  # колонка E
+    return True
+
+
+def get_users_with_telegram_id() -> list[dict]:
+    """Повертає всіх учнів у кого є telegram_id."""
+    ws = _open_sheet(SHEET_USERS)
+    records = ws.get_all_records()
+    result = []
+    for row in records:
+        if row.get("telegram_id"):
+            result.append(row)
+    return result

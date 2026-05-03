@@ -4,6 +4,7 @@ from aiogram.fsm.context import FSMContext
 
 from keyboards.keyboards import main_menu_kb, back_kb
 from services.sheets import get_user_by_phone
+from config import LESSON_PRICE
 
 router = Router()
 
@@ -27,6 +28,7 @@ async def show_balance(message: Message, state: FSMContext):
     paid = int(user.get("paid", 0))
     used = int(user.get("used", 0))
     remaining = paid - used
+    money_left = remaining * LESSON_PRICE
 
     # Візуальна шкала занять
     bar = _progress_bar(used, paid)
@@ -42,6 +44,7 @@ async def show_balance(message: Message, state: FSMContext):
         f"✅ Оплачено занять: <b>{paid}</b>\n"
         f"📖 Пройдено занять: <b>{used}</b>\n"
         f"🎯 Залишилось: <b>{remaining}</b> з {paid}\n\n"
+        f"💰 Залишок коштів: <b>{money_left} грн</b>\n\n"
         f"{bar}\n\n"
         f"{status_emoji} Статус: <b>{status_text}</b>\n"
         f"━━━━━━━━━━━━━━━━━\n\n"

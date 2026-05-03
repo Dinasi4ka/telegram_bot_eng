@@ -5,7 +5,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 
 from keyboards.keyboards import main_menu_kb, back_kb
-from services.sheets import get_user_by_phone
+from services.sheets import get_user_by_phone, save_telegram_id
 
 router = Router()
 
@@ -50,6 +50,7 @@ async def handle_phone(message: Message, state: FSMContext):
         return
 
     await state.update_data(phone=phone, name=user["name"])
+    save_telegram_id(phone, message.from_user.id)
     await state.set_state(None)
     await message.answer(
         f"✅ Вітаємо, <b>{user['name']}</b>!\n\n"

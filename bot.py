@@ -9,6 +9,7 @@ from aiogram.types import Update
 
 from config import BOT_TOKEN
 from handlers import start, balance, schedule, info
+from scheduler import start_scheduler
 
 logging.basicConfig(
     level=logging.INFO,
@@ -52,6 +53,7 @@ async def main():
         token=BOT_TOKEN,
         default=DefaultBotProperties(parse_mode=ParseMode.HTML)
     )
+    start_scheduler(bot)
 
     dp = Dispatcher()
 
