@@ -57,8 +57,8 @@ def reschedule_kb(teacher_link: str) -> InlineKeyboardMarkup:
 
 def packages_kb() -> InlineKeyboardMarkup:
     b = InlineKeyboardBuilder()
-    b.button(text="📦 4 заняття — 1240 грн", callback_data="buy:4")
-    b.button(text="📦 8 занять — 2480 грн", callback_data="buy:8")
+    b.button(text="📦 4 заняття — 1400 грн", callback_data="buy:4")
+    b.button(text="📦 8 занять — 2800 грн", callback_data="buy:8")
     b.button(text="◀️ Назад до меню", callback_data="back")
     b.adjust(1)
     return b.as_markup()
