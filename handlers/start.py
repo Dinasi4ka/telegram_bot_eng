@@ -44,7 +44,7 @@ async def handle_phone(message: Message, state: FSMContext):
     if not user:
         await message.answer(
             "❌ Номер телефону <b>не знайдено</b> в базі учнів.\n\n"
-            "Перевірте номер або зверніться до адміністратора.\n\n"
+            "Перевірте номер або зверніться до викладача.\n\n"
             "Спробуйте ще раз:"
         )
         return
