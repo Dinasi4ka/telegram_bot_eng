@@ -4,7 +4,8 @@ from aiogram.fsm.context import FSMContext
 
 from keyboards.keyboards import main_menu_kb, back_kb
 from services.sheets import get_user_by_phone
-from config import LESSON_PRICE
+from utils.responses import no_user, no_balance
+
 
 router = Router()
 
@@ -21,14 +22,26 @@ async def show_balance(message: Message, state: FSMContext):
         return
 
     user = get_user_by_phone(phone)
+
     if not user:
-        await message.answer("❌ Учня не знайдено. Зверніться до адміністратора.")
+        await message.answer(no_user())
         return
 
-    paid = int(user.get("paid", 0))
-    used = int(user.get("used", 0))
+    def safe_int(value):
+        try:
+            return int(value or 0)
+        except:
+            return 0
+
+    paid = safe_int(user.get("paid"))
+    used = safe_int(user.get("used"))
+
+    if paid == 0:
+        await message.answer(no_balance())
+        return
+
     remaining = paid - used
-    money_left = remaining * LESSON_PRICE
+
 
     # Візуальна шкала занять
     bar = _progress_bar(used, paid)
@@ -44,14 +57,13 @@ async def show_balance(message: Message, state: FSMContext):
         f"✅ Оплачено занять: <b>{paid}</b>\n"
         f"📖 Пройдено занять: <b>{used}</b>\n"
         f"🎯 Залишилось: <b>{remaining}</b> з {paid}\n\n"
-        f"💰 Залишок коштів: <b>{money_left} грн</b>\n\n"
         f"{bar}\n\n"
         f"{status_emoji} Статус: <b>{status_text}</b>\n"
         f"━━━━━━━━━━━━━━━━━\n\n"
         + (
-            f"⚠️ <i>Залишилось мало занять. Зверніться до адміністратора для поповнення.</i>"
+            f"⚠️ <i>Залишилось мало занять. Зверніться до викладача для поповнення.</i>"
             if remaining <= 2 else
-            f"💡 <i>Для поповнення занять зверніться до адміністратора.</i>"
+            f"💡 <i>Для поповнення занять зверніться до викладача.</i>"
         ),
         reply_markup=back_kb()
     )

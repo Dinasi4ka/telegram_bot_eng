@@ -5,6 +5,7 @@ from aiogram.fsm.context import FSMContext
 from config import TEACHER_LINK
 from keyboards.keyboards import back_kb, cancel_lesson_kb, reschedule_kb
 from services.sheets import get_booked_slots_by_phone
+from utils.responses import no_user, no_schedule
 
 router = Router()
 
@@ -14,18 +15,13 @@ async def my_schedule(message: Message, state: FSMContext):
     data = await state.get_data()
     phone = data.get("phone")
     if not phone:
-        await message.answer("⚠️ Спочатку введіть телефон — /start")
+        await message.answer(no_user())
         return
 
     lessons = get_booked_slots_by_phone(phone)
 
     if not lessons:
-        await message.answer(
-            "📋 <b>Ваш розклад</b>\n\n"
-            "У вас немає запланованих занять.\n\n"
-            "Для запису на заняття зверніться до викладача 👩‍🏫",
-            reply_markup=back_kb()
-        )
+        await message.answer(no_schedule())
         return
 
     text = "📋 <b>Ваш розклад занять:</b>\n\n"
@@ -41,8 +37,8 @@ async def cancel_info(message: Message):
     await message.answer(
         "❌ <b>Скасування заняття</b>\n\n"
         "⚠️ <b>Умови:</b>\n"
-        "• Без списання заняття — якщо скасування зроблено <b>за 1,5 години</b> до уроку\n"
-        "• Якщо пізніше — заняття списується\n\n"
+        "• Без списання заняття — якщо скасування зроблено <b>за 1 годину</b> до уроку\n"
+        "• Якщо пізніше — заняття списується і скасовується\n\n"
         "Напишіть викладачу:\n"
         "1️⃣ Дату і час заняття\n"
         "2️⃣ Причину (за бажанням)\n\n"
@@ -57,7 +53,7 @@ async def reschedule_info(message: Message):
         "🔄 <b>Перенесення заняття</b>\n\n"
         "⚠️ <b>Правила:</b>\n"
         "• Перенесення можливе до <b>3 разів на місяць</b>\n"
-        "• Просимо повідомляти завчасно (щонайменше <b>за 1,5 год</b> до початку заняття)\n\n"
+        "• Просимо повідомляти завчасно (щонайменше <b>за 1 год</b> до початку заняття)\n\n"
         "Напишіть викладачу:\n"
         "1️⃣ Дату і час заняття\n"
         "2️⃣ На коли зручно перенести (час та дата узгоджується з викладачем)\n\n"

@@ -74,7 +74,7 @@ def start_scheduler(bot: Bot) -> AsyncIOScheduler:
     scheduler.add_job(
         check_and_send_reminders,
         trigger="interval",
-        minutes=10,
+        minutes=1,
         args=[bot],
         next_run_time=datetime.now()
     )
