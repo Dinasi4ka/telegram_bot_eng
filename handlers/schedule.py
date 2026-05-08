@@ -3,6 +3,7 @@ from aiogram.types import Message
 from aiogram.fsm.context import FSMContext
 
 from config import TEACHER_LINK
+from datetime import date as dt
 from keyboards.keyboards import back_kb, cancel_lesson_kb, reschedule_kb
 from services.sheets import get_booked_slots_by_phone
 from utils.responses import no_user, no_schedule
@@ -26,7 +27,17 @@ async def my_schedule(message: Message, state: FSMContext):
 
     text = "📋 <b>Ваш розклад занять:</b>\n\n"
     for l in sorted(lessons, key=lambda x: (str(x.get("date", "")), str(x.get("time", "")))):
-        text += f"📆 <b>{l.get('date', '—')}</b>  🕐 <b>{l.get('time', '—')}</b>\n"
+        DAYS_UA = ["Понеділок", "Вівторок", "Середа", "Четвер", "П'ятниця", "Субота", "Неділя"]
+
+        try:
+            d = dt.fromisoformat(str(l.get("date", "")))
+            day_name = DAYS_UA[d.weekday()]
+            date_str = d.strftime("%d.%m.%Y")
+        except:
+            day_name = ""
+            date_str = str(l.get("date", "—"))
+
+        text += f"📆 <b>{day_name}, {date_str}</b>  🕐 <b>{l.get('time', '—')}</b>\n"
 
     text += "\nДля змін — зверніться до викладача через кнопку меню."
     await message.answer(text, reply_markup=back_kb())
