@@ -38,6 +38,9 @@ TEACHER_LINK: str = f"https://t.me/{TEACHER_USERNAME.lstrip('@')}"
 # Замініть на реальні посилання Monobank
 MONOBANK_LINK_4: str = os.getenv("MONOBANK_LINK_4", "https://pay.obank.com.ua/payment?type=iban&uuid=BC663A19-27CC-41CD-837F-0ADAF9A09EF0")
 MONOBANK_LINK_8: str = os.getenv("MONOBANK_LINK_8", "https://pay.obank.com.ua/payment?type=iban&uuid=18CF57E4-6150-4A7C-9779-E9F3FD2373DE")
+MONOBANK_LINK_9: str = os.getenv("MONOBANK_LINK_9", "https://pay.obank.com.ua/payment?type=iban&uuid=6B6BA643-848C-451E-9356-C83722602469")
+MONOBANK_LINK_12: str = os.getenv("MONOBANK_LINK_12", "https://pay.obank.com.ua/payment?type=iban&uuid=A786D0CF-7097-42D4-A36D-5DB4F44621B7")
 PRICE_4: int = 1400
 PRICE_8: int = 2800
-
+PRICE_9: int = 3150
+PRICE_12: int = 4200

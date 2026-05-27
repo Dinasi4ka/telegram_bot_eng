@@ -4,7 +4,7 @@ from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 
-from config import ADMIN_IDS, TEACHER_USERNAME, TEACHER_LINK, MONOBANK_LINK_4, MONOBANK_LINK_8, PRICE_4, PRICE_8
+from config import ADMIN_IDS, TEACHER_USERNAME, TEACHER_LINK, MONOBANK_LINK_4, MONOBANK_LINK_8, MONOBANK_LINK_9, MONOBANK_LINK_12, PRICE_4, PRICE_8, PRICE_9, PRICE_12
 from keyboards.keyboards import back_kb, admin_kb, packages_kb, payment_kb, teacher_kb
 from services.sheets import get_all_users
 
@@ -88,6 +88,28 @@ async def buy_8(callback: CallbackQuery):
         reply_markup=payment_kb(MONOBANK_LINK_8, "8 занять")
     )
     await callback.answer()
+
+    @router.callback_query(F.data == "buy:9")
+    async def buy_9(callback: CallbackQuery):
+        await callback.message.edit_text(
+            f"📦 <b>Пакет: 9 занять</b>\n\n"
+            f"💰 Ціна: <b>{PRICE_9} грн</b>\n\n"
+            f"Для оплати натисніть кнопку нижче 👇\n\n"
+            f"<i>Після оплати обов'язково надішліть скріншот викладачу — {TEACHER_USERNAME}</i>",
+            reply_markup=payment_kb(MONOBANK_LINK_9, "9 занять")
+        )
+        await callback.answer()
+
+    @router.callback_query(F.data == "buy:12")
+    async def buy_12(callback: CallbackQuery):
+        await callback.message.edit_text(
+            f"📦 <b>Пакет: 12 занять</b>\n\n"
+            f"💰 Ціна: <b>{PRICE_12} грн</b>\n\n"
+            f"Для оплати натисніть кнопку нижче 👇\n\n"
+            f"<i>Після оплати обов'язково надішліть скріншот викладачу — {TEACHER_USERNAME}</i>",
+            reply_markup=payment_kb(MONOBANK_LINK_12, "12 занять")
+        )
+        await callback.answer()
 
 
 # ──────────────── ADMIN ────────────────
